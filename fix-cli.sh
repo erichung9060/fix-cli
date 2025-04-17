@@ -51,18 +51,18 @@ I am using macbook. "
 		prompt+="Please give me a correct one-line command to fix this problem. Only return the command, no explanation or additional words needed."
 	fi
 
-	echo "\033[0;34m[fix] Asking Gemini for a fix...\033[0m"
+	echo -e "\033[0;34m[fix] Asking Gemini for a fix...\033[0m"
 	local full_response=$(ask_gemini "$prompt")
 
 	if [[ "$1" == "-e" ]]; then
 		explanation=$(echo "$full_response" | sed '$d')
 		fixed_command=$(echo "$full_response" | tail -n1 | sed 's/^COMMAND://')
-		echo "\033[0;32m[fix] Gemini's explanation: \033[0m"
+		echo -e "\033[0;32m[fix] Gemini's explanation: \033[0m"
 		echo "$explanation"
 	else
 		fixed_command=$full_response
 	fi
-	echo "\033[0;32m[fix] Gemini suggests command: \033[0m$fixed_command"
+	echo -e "\033[0;32m[fix] Gemini suggests command: \033[0m$fixed_command"
 
 	echo -n "Execute the command? (y/n) "
 	read confirm
