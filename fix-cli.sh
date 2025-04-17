@@ -25,19 +25,17 @@ fix() {
 		if [[ "$confirm" == "y" ]]; then
 			case $(echo $SHELL) in
 				*zsh)
-					SHELL_RC="$HOME/.zshrc"
+					sed -i '' '/source.*fix-cli\.sh/d' $HOME/.zshrc
 					;;
 				*bash)
-					SHELL_RC="$HOME/.bashrc"
+					sed -i '/source.*fix-cli\.sh/d' $HOME/.bashrc
 					;;
 				*)
 					echo "Error: Unsupported shell. Please use bash or zsh."
 					exit 1
 					;;
 			esac
-			echo $SHELL_RC
-			
-			sed -i '' '/source.*fix-cli\.sh/d' $SHELL_RC
+
 			rm -f "$HOME/.fix-cli.sh"
 			echo "✅ fix-cli has been uninstalled. Please restart your terminal."
 			return 0
