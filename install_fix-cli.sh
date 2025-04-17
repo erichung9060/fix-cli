@@ -22,7 +22,7 @@ curl -s -o $FIX https://raw.githubusercontent.com/erichung9060/fix-cli/refs/head
 
 echo -n "🔑 請輸入你的 Gemini API Key："
 read -r -s API_KEY
-echo "export GEMINI_API_KEY=\"$API_KEY\"" > "$FIX"
+echo "export GEMINI_API_KEY=\"$API_KEY\"" >> "$FIX"
 
 # Check if source line already exists
 if ! grep -q "source $FIX" "$SHELL_RC"; then
