@@ -78,9 +78,9 @@ I am using $OS. "
 	else
 		fixed_command=$full_response
 	fi
-	echo -e "\033[0;32m[fix] Gemini suggests command: \033[0m$fixed_command"
 
-	echo -n "Execute the command? (y/n) "
+	echo -e "\033[0;32m[fix] Gemini suggests command: \033[0m$fixed_command"
+	echo -n "Execute the command? (y or Enter/n) "
 	read confirm
 	if [[ "$confirm" == "y" || -z "$confirm" ]]; then
 		echo -e "\033[0;36m[fix] Executing...\033[0m"
@@ -89,7 +89,8 @@ I am using $OS. "
 		echo "Execution cancelled."
 	fi
 
-	echo -n -e "\033[0;32m[fix] Execute original command? (y/n) \033[0m"
+	echo -e "\033[0;32m[fix] Original command: \033[0m$prev_command"
+	echo -n "Execute the command? (y or Enter/n) "
 	read confirm
 	if [[ "$confirm" == "y" || -z "$confirm" ]]; then
 		echo -e "\033[0;36m[fix] Executing $prev_command ...\033[0m"
