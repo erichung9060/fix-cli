@@ -1,6 +1,20 @@
 #!/bin/bash
 FIX="$HOME/.fix-cli.sh"
 
+
+
+echo "Downloading fix-cli..."
+curl -s -o $FIX https://raw.githubusercontent.com/erichung9060/fix-cli/refs/heads/main/fix-cli.sh
+
+echo -n "🔑 請輸入你的 Gemini API Key："
+read -r -s API_KEY
+echo "export GEMINI_API_KEY=\"$API_KEY\"" >> "$FIX"
+
+echo -n -e "\n💻 請輸入你使用的OS (MacOS or Linux)："
+read -r OS
+echo "export OS=\"$OS\"" >> "$FIX"
+
+
 case $(echo $SHELL) in
     *zsh)
         SHELL_RC="$HOME/.zshrc"
@@ -14,19 +28,12 @@ case $(echo $SHELL) in
         ;;
 esac
 
-echo "Downloading fix-cli..."
-curl -s -o $FIX https://raw.githubusercontent.com/erichung9060/fix-cli/refs/heads/main/fix-cli.sh
-
-echo -n "🔑 請輸入你的 Gemini API Key："
-read -r -s API_KEY
-echo "export GEMINI_API_KEY=\"$API_KEY\"" >> "$FIX"
-
 if ! grep -q "source $FIX" "$SHELL_RC"; then
     echo "source $FIX" >> "$SHELL_RC"
 fi
 
 source "$SHELL_RC"
 
-rm install_fix-cli.sh
+# rm install_fix-cli.sh
 
 echo -e "\n✅ 安裝完成！請試著打個錯的指令然後輸入 \033[1;32mfix\033[0m 來自動修復！"

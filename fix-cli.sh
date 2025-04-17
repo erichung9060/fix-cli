@@ -55,7 +55,7 @@ fix() {
 
 	local prompt="I just executed this command: $prev_command
 Its output was: $full_output\n
-I am using macbook. "
+I am using $OS. "
 	if [[ "$1" == "-e" ]]; then
 		prompt+="Please explain what went wrong and provide a correct command to fix this problem. Include a brief explanation of the issue. At the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
 	else
@@ -64,6 +64,10 @@ I am using macbook. "
 
 	echo -e "\033[0;34m[fix] Asking Gemini for a fix...\033[0m"
 	local full_response=$(ask_gemini "$prompt")
+	if [[ $full_response == 'null']]; then
+		echo "API Key not valid."
+		return 1
+	fi
 
 	if [[ "$1" == "-e" ]]; then
 		explanation=$(echo "$full_response" | sed '$d')

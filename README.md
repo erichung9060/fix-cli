@@ -45,3 +45,8 @@ $ fix
 [fix] Asking Gemini for a fix...
 [fix] Gemini suggests command: ls /
 ```
+
+
+change to English
+supply OS type
+unavailab api key
