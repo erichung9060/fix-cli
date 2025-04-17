@@ -35,10 +35,9 @@ fix() {
 					exit 1
 					;;
 			esac
-
-			# Remove source line from .zshrc
+			echo $SHELL_RC
+			
 			sed -i '' '/source.*fix-cli\.sh/d' $SHELL_RC
-			# Remove fix-cli.sh
 			rm -f "$HOME/.fix-cli.sh"
 			echo "✅ fix-cli has been uninstalled. Please restart your terminal."
 			return 0
@@ -98,3 +97,4 @@ I am using macbook. "
 
 	rm -f "$tmpfile"
 }
+
