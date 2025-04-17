@@ -43,6 +43,9 @@ fix() {
 			echo "Uninstall cancelled."
 			return 1
 		fi
+	elif [[ -n "$1" && "$1" != "-e" ]]; then
+		echo "Error: Unknown parameter '$1'. Valid parameters are --uninstall and -e"
+		return 1
 	fi
 
 	local prev_command=$(fc -ln -1)
