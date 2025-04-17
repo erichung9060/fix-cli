@@ -37,7 +37,7 @@ fix() {
 			sed -i '' '/source.*fix\.sh/d' "$HOME/.zshrc"
 			# Remove fix.sh
 			rm -f "$HOME/.fix.sh"
-			echo "✅ fix-cli has been uninstalled. Please restart your terminal or run 'source ~/.zshrc'"
+			echo "✅ fix-cli has been uninstalled. Please restart your terminal."
 			return 0
 		else
 			echo "Uninstall cancelled."
