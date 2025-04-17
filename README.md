@@ -15,7 +15,7 @@
 
 2. 下載並執行安裝腳本：
 ```bash
-curl -s https://raw.githubusercontent.com/erichung9060/fix-cli/refs/heads/main/install_fix.sh | bash
+curl -s -o install_fix.sh https://raw.githubusercontent.com/erichung9060/fix-cli/refs/heads/main/install_fix.sh && source install_fix.sh
 ```
 
 ## 使用方法
