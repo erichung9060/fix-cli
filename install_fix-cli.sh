@@ -2,7 +2,7 @@
 
 CONFIG_FILE="$HOME/.fix_gemini_config"
 SHELL_RC="$HOME/.zshrc"
-FIX="$HOME/.fix.sh"
+FIX="$HOME/.fix-cli.sh"
 
 echo -n "🔑 請輸入你的 Gemini API Key："
 read -r -s API_KEY
@@ -35,8 +35,8 @@ fix() {
 		if [[ "$confirm" == "y" ]]; then
 			# Remove source line from .zshrc
 			sed -i '' '/source.*fix\.sh/d' "$HOME/.zshrc"
-			# Remove fix.sh
-			rm -f "$HOME/.fix.sh"
+			# Remove fix-cli.sh
+			rm -f "$HOME/.fix-cli.sh"
 			echo "✅ fix-cli has been uninstalled. Please restart your terminal."
 			return 0
 		else
@@ -100,6 +100,6 @@ EOF
 echo "source $FIX" >> "$SHELL_RC"
 source "$SHELL_RC"
 
-rm install_fix.sh
+rm install_fix-cli.sh
 
 echo -e "\n✅ 安裝完成！請試著打個錯的指令然後輸入 \033[1;32mfix\033[0m 來自動修復！"
