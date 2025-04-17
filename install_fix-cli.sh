@@ -3,6 +3,7 @@
 SHELL_RC="$HOME/.zshrc"
 FIX="$HOME/.fix-cli.sh"
 
+echo "Downloading fix-cli..."
 curl -s -o $FIX https://raw.githubusercontent.com/erichung9060/fix-cli/refs/heads/main/fix-cli.sh
 
 echo -n "🔑 請輸入你的 Gemini API Key："
