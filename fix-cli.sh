@@ -48,7 +48,7 @@ fix() {
 		return 1
 	fi
 
-	local prev_command=$(fc -ln -1)
+	local prev_command=$(fc -ln -1 | sed 's/^[[:space:]]*//')
 	local tmpfile=$(mktemp)
 	eval "$prev_command" 2>&1 | tee "$tmpfile" > /dev/null
 	local full_output=$(<"$tmpfile")
@@ -92,7 +92,7 @@ I am using $OS. "
 	echo -n -e "\033[0;32m[fix] Execute original command? (y/n) \033[0m"
 	read confirm
 	if [[ "$confirm" == "y" || -z "$confirm" ]]; then
-		echo -e "\033[0;36m[fix] Executing...\033[0m"
+		echo -e "\033[0;36m[fix] Executing $prev_command ...\033[0m"
 		eval "$prev_command"
 	else
 		echo "Execution cancelled."

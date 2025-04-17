@@ -36,6 +36,6 @@ fi
 
 source "$SHELL_RC"
 
-rm install_fix-cli.sh
+# rm install_fix-cli.sh
 
 echo -e "\n✅ 安裝完成！請試著打個錯的指令然後輸入 \033[1;32mfix\033[0m 來自動修復！"
