@@ -2,7 +2,7 @@
 
 CONFIG_FILE="$HOME/.fix_gemini_config"
 SHELL_RC="$HOME/.zshrc"
-FIX="$HOME/fix.sh"
+FIX="$HOME/.fix.sh"
 
 echo -n "🔑 請輸入你的 Gemini API Key："
 read -r -s API_KEY
