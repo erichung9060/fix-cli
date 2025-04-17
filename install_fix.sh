@@ -29,6 +29,22 @@ ask_gemini() {
 }
 
 fix() {
+	if [[ "$1" == "--uninstall" ]]; then
+		echo -n "Are you sure you want to uninstall fix-cli? (y/n) "
+		read confirm
+		if [[ "$confirm" == "y" ]]; then
+			# Remove source line from .zshrc
+			sed -i '' '/source.*fix\.sh/d' "$HOME/.zshrc"
+			# Remove fix.sh
+			rm -f "$HOME/.fix.sh"
+			echo "✅ fix-cli has been uninstalled. Please restart your terminal or run 'source ~/.zshrc'"
+			return 0
+		else
+			echo "Uninstall cancelled."
+			return 1
+		fi
+	fi
+
 	local prev_command=$(fc -ln -1)
 	local tmpfile=$(mktemp)
 	eval "$prev_command" 2>&1 | tee "$tmpfile" > /dev/null
