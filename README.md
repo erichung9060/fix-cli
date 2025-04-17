@@ -8,6 +8,8 @@
 - 🔄 Option to confirm before running the suggested fix
 - 📝 Use the -e flag to get a detailed explanation of the issue
 - 🗑️ Use the --uninstall flag to completely remove the tool
+- ✅ Supports Linux and macOS
+
 
 ## Installation
 
