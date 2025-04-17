@@ -1,3 +1,4 @@
+
 ask_gemini() {
 	local prompt="$1"
 	local api_key="$GEMINI_API_KEY"
@@ -22,8 +23,21 @@ fix() {
 		echo -n "Are you sure you want to uninstall fix-cli? (y/n) "
 		read confirm
 		if [[ "$confirm" == "y" ]]; then
+			case $(echo $SHELL) in
+				*zsh)
+					SHELL_RC="$HOME/.zshrc"
+					;;
+				*bash)
+					SHELL_RC="$HOME/.bashrc"
+					;;
+				*)
+					echo "Error: Unsupported shell. Please use bash or zsh."
+					exit 1
+					;;
+			esac
+
 			# Remove source line from .zshrc
-			sed -i '' '/source.*fix\.sh/d' "$HOME/.zshrc"
+			sed -i '' '/source.*fix-cli\.sh/d' $SHELL_RC
 			# Remove fix-cli.sh
 			rm -f "$HOME/.fix-cli.sh"
 			echo "✅ fix-cli has been uninstalled. Please restart your terminal."
