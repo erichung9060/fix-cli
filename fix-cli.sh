@@ -64,8 +64,9 @@ I am using $OS. "
 
 	echo -e "\033[0;34m[fix] Asking Gemini for a fix...\033[0m"
 	local full_response=$(ask_gemini "$prompt")
-	if [[ $full_response == 'null']]; then
-		echo "API Key not valid."
+
+	if [[ $full_response == 'null' ]]; then
+		echo -e "\033[0;31m[fix] Error: API Key not valid.\033[0m"
 		return 1
 	fi
 
@@ -88,7 +89,7 @@ I am using $OS. "
 		echo "Execution cancelled."
 	fi
 
-	echo -n "\033[0;32m[fix] Execute original command? (y/n) \033[0m"
+	echo -n -e "\033[0;32m[fix] Execute original command? (y/n) \033[0m"
 	read confirm
 	if [[ "$confirm" == "y" || -z "$confirm" ]]; then
 		echo -e "\033[0;36m[fix] Executing...\033[0m"
