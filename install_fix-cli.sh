@@ -7,11 +7,18 @@ curl -s -o $FIX https://raw.githubusercontent.com/erichung9060/fix-cli/refs/head
 case $(echo $SHELL) in
     *zsh)
         SHELL_RC="$HOME/.zshrc"
-		brew install jq
+		if ! command -v jq >/dev/null 2>&1; then
+		    echo "jq not found. Installing with Homebrew..."
+			brew install jq
+		fi
         ;;
     *bash)
         SHELL_RC="$HOME/.bashrc"
-		sudo apt  install jq
+		if ! command -v jq >/dev/null 2>&1; then
+            echo "jq not found. Installing with apt..."
+			sudo apt install jq
+		fi
+		
         ;;
     *)
         echo "Error: Unsupported shell. Please use bash or zsh."
