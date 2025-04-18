@@ -48,7 +48,9 @@ fix() {
 		return 1
 	fi
 
-	local prev_command=$(fc -ln -1 | sed 's/^[[:space:]]*//')
+	local prev_command=$(fc -ln -1)
+	prev_command=$(echo "$prev_command" | sed 's/^[[:space:]]*//')
+
 	local tmpfile=$(mktemp)
 	eval "$prev_command" 2>&1 | tee "$tmpfile" > /dev/null
 	local full_output=$(<"$tmpfile")

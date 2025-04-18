@@ -4,6 +4,21 @@ FIX="$HOME/.fix-cli.sh"
 echo "Downloading fix-cli..."
 curl -s -o $FIX https://raw.githubusercontent.com/erichung9060/fix-cli/refs/heads/main/fix-cli.sh
 
+case $(echo $SHELL) in
+    *zsh)
+        SHELL_RC="$HOME/.zshrc"
+		brew install jq
+        ;;
+    *bash)
+        SHELL_RC="$HOME/.bashrc"
+		sudo apt  install jq
+        ;;
+    *)
+        echo "Error: Unsupported shell. Please use bash or zsh."
+        exit 1
+        ;;
+esac
+
 echo -n "🔑 請輸入你的 Gemini API Key："
 read -r -s API_KEY
 echo "export GEMINI_API_KEY=\"$API_KEY\"" >> "$FIX"
@@ -16,19 +31,6 @@ case "${uname_out}" in
 esac
 echo "export OS=\"$os_type\"" >> "$FIX"
 
-
-case $(echo $SHELL) in
-    *zsh)
-        SHELL_RC="$HOME/.zshrc"
-        ;;
-    *bash)
-        SHELL_RC="$HOME/.bashrc"
-        ;;
-    *)
-        echo "Error: Unsupported shell. Please use bash or zsh."
-        exit 1
-        ;;
-esac
 
 if ! grep -q "source $FIX" "$SHELL_RC"; then
     echo "source $FIX" >> "$SHELL_RC"
