@@ -1,3 +1,16 @@
+#!/bin/bash
+
+show_help() {
+	echo "usage: fix [-h] [-e] [-i] [--uninstall]"
+	echo ""
+	echo "Fix-cli - A command-line fixing tool powered by Gemini AI"
+	echo ""
+	echo "options:"
+	echo "  -h, --help     show this help message and exit"
+	echo "  --uninstall    uninstall fix-cli from your system"
+	echo "  -e             explain the error and provide detailed solution"
+	echo "  -i             interactive mode for custom prompt input"
+}
 
 ask_gemini() {
 	local prompt="$1"
@@ -19,34 +32,54 @@ ask_gemini() {
 }
 
 fix() {
-	if [[ "$1" == "--uninstall" ]]; then
-		echo -n "Are you sure you want to uninstall fix-cli? (y/n) "
-		read confirm
-		if [[ "$confirm" == "y" ]]; then
-			case $(echo $SHELL) in
-				*zsh)
-					sed -i '' '/source.*fix-cli\.sh/d' $HOME/.zshrc
-					;;
-				*bash)
-					sed -i '/source.*fix-cli\.sh/d' $HOME/.bashrc
-					;;
-				*)
-					echo "Error: Unsupported shell. Please use bash or zsh."
-					exit 1
-					;;
-			esac
-
-			rm -f "$HOME/.fix-cli.sh"
-			echo "✅ fix-cli has been uninstalled. Please restart your terminal."
+	user_input_prompt=0
+	need_explain=0
+	# handle parameters
+	case "$1" in
+		"-h"|"--help")
+			show_help
 			return 0
-		else
-			echo "Uninstall cancelled."
+			;;
+		"--uninstall")
+			echo -n "Are you sure you want to uninstall fix-cli? (y/n) "
+			read confirm
+			if [[ "$confirm" == "y" ]]; then
+				case $(echo $SHELL) in
+					*zsh)
+						sed -i '' '/source.*fix-cli\.sh/d' $HOME/.zshrc
+						;;
+					*bash)
+						sed -i '/source.*fix-cli\.sh/d' $HOME/.bashrc
+						;;
+					*)
+						echo "Error: Unsupported shell. Please use bash or zsh."
+						exit 1
+						;;
+				esac
+
+				rm -f "$HOME/.fix-cli.sh"
+				echo "✅ fix-cli has been uninstalled. Please restart your terminal."
+				return 0
+			else
+				echo "Uninstall cancelled."
+				return 1
+			fi
+			;;
+		"-e")
+			need_explain=1
+			;;
+		"-i")
+			user_input_prompt=1
+			need_explain=1
+			;;
+		"")
+			;;
+		*)
+			echo "Error: Unknown parameter '$1'"
+			show_help
 			return 1
-		fi
-	elif [[ -n "$1" && "$1" != "-e" ]]; then
-		echo "Error: Unknown parameter '$1'. Valid parameters are --uninstall and -e"
-		return 1
-	fi
+			;;
+	esac
 
 	local prev_command=$(fc -ln -1)
 	prev_command=$(echo "$prev_command" | sed 's/^[[:space:]]*//')
@@ -55,14 +88,23 @@ fix() {
 	eval "$prev_command" 2>&1 | tee "$tmpfile" > /dev/null
 	local full_output=$(<"$tmpfile")
 
-	local prompt="I just executed this command: $prev_command
-Its output was: $full_output\n
-I am using $OS. "
-	if [[ "$1" == "-e" ]]; then
-		prompt+="Please explain what went wrong and provide a correct command to fix this problem. Include a brief explanation of the issue. At the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
+	local prompt="I am using $OS. I executed this command: $prev_command. "
+
+	if [[ $user_input_prompt == 1 ]]; then
+		echo -n "Please enter prompt for Gemini: "
+		read user_prompt
+		prompt+=$user_prompt
 	else
-		prompt+="Please give me a correct one-line command to fix this problem. Only return the command, no explanation or additional words needed."
+		prompt+="And its output was: $full_output."
 	fi
+
+	if [[ $need_explain == 1 ]]; then
+		prompt+=" Please explain what went wrong and provide a correct command to fix this problem. Include a brief explanation of the issue. At the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
+	else
+		prompt+=" Please give me a correct one-line command to fix this problem. Only return the command, no explanation or additional words needed."
+	fi
+
+	echo $prompt
 
 	echo -e "\033[0;34m[fix] Asking Gemini for a fix...\033[0m"
 	local full_response=$(ask_gemini "$prompt")
@@ -72,7 +114,7 @@ I am using $OS. "
 		return 1
 	fi
 
-	if [[ "$1" == "-e" ]]; then
+	if [[ $need_explain == 1 ]]; then
 		explanation=$(echo "$full_response" | sed '$d')
 		fixed_command=$(echo "$full_response" | tail -n1 | sed 's/^COMMAND://')
 		echo -e "\033[0;32m[fix] Gemini's explanation: \033[0m"
