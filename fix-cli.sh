@@ -81,32 +81,32 @@ fix() {
 			;;
 	esac
 
-	local prev_command=$(fc -ln -1)
-	prev_command=$(echo "$prev_command" | sed 's/^[[:space:]]*//')
-
-	local tmpfile=$(mktemp)
-	eval "$prev_command" 2>&1 | tee "$tmpfile" > /dev/null
-	local full_output=$(<"$tmpfile")
-
-	local prompt="I am using $OS. I executed this command: $prev_command. "
-
+	local prompt=""
 	if [[ $user_input_prompt == 1 ]]; then
 		echo "Please enter prompt for Gemini (press Ctrl+D when done):"
 		local tmp_prompt=$(mktemp)
 		cat > "$tmp_prompt"
 		user_prompt=$(<"$tmp_prompt")
 		rm -f "$tmp_prompt"
-		prompt+="User prompt: $user_prompt"
+		prompt+=$user_prompt
+		prompt+="\nAt the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
 	else
-		prompt+="And its output was: $full_output."
+		local command=$(fc -ln -1)
+		command=$(echo "$command" | sed 's/^[[:space:]]*//')
+
+		local tmpfile=$(mktemp)
+		eval "$command" 2>&1 | tee "$tmpfile" > /dev/null
+		local command_output=$(<"$tmpfile")
+
+		prompt+="I am using $OS. I executed this command: \"$command\". And its output was: \n$command_output.\n"
+		if [[ $need_explain == 1 ]]; then
+			prompt+="Please explain what went wrong and provide a correct command to fix this problem. Include a brief explanation of the issue. At the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
+		else
+			prompt+="Please give me a correct one-line command to fix this problem. Only return the command, no explanation or additional words needed."
+		fi
 	fi
 
-	if [[ $need_explain == 1 ]]; then
-		prompt+=" Please explain what went wrong and provide a correct command to fix this problem. Include a brief explanation of the issue. At the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
-	else
-		prompt+=" Please give me a correct one-line command to fix this problem. Only return the command, no explanation or additional words needed."
-	fi
-
+	
 	echo $prompt
 
 	echo -e "\033[0;34m[fix] Asking Gemini for a fix...\033[0m"
@@ -136,12 +136,12 @@ fix() {
 		echo "Execution cancelled."
 	fi
 
-	echo -e "\033[0;32m[fix] Original command: \033[0m$prev_command"
+	echo -e "\033[0;32m[fix] Original command: \033[0m$command"
 	echo -n "Execute the command? (y or Enter/n) "
 	read confirm
 	if [[ "$confirm" == "y" || -z "$confirm" ]]; then
-		echo -e "\033[0;36m[fix] Executing $prev_command ...\033[0m"
-		eval "$prev_command"
+		echo -e "\033[0;36m[fix] Executing $command ...\033[0m"
+		eval "$command"
 	else
 		echo "Execution cancelled."
 	fi
