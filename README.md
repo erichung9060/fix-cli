@@ -17,7 +17,7 @@
 
 2. Download and run the installation script:
 ```bash
-curl -s -o install_fix-cli.sh https://raw.githubusercontent.com/erichung9060/fix-cli/refs/heads/main/install_fix-cli.sh && source install_fix-cli.sh
+source <(curl -fsSL https://raw.githubusercontent.com/erichung9060/fix-cli/refs/heads/main/install_fix-cli.sh)
 ```
 
 ## Usage

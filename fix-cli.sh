@@ -91,9 +91,12 @@ fix() {
 	local prompt="I am using $OS. I executed this command: $prev_command. "
 
 	if [[ $user_input_prompt == 1 ]]; then
-		echo -n "Please enter prompt for Gemini: "
-		read user_prompt
-		prompt+=$user_prompt
+		echo "Please enter prompt for Gemini (press Ctrl+D when done):"
+		local tmp_prompt=$(mktemp)
+		cat > "$tmp_prompt"
+		user_prompt=$(<"$tmp_prompt")
+		rm -f "$tmp_prompt"
+		prompt+="User prompt: $user_prompt"
 	else
 		prompt+="And its output was: $full_output."
 	fi
