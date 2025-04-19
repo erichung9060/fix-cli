@@ -93,6 +93,10 @@ fix() {
 	else
 		local command=$(fc -ln -1)
 		command=$(echo "$command" | sed 's/^[[:space:]]*//')
+		if [[ "$command" == "fix"* ]]; then
+			echo "Error: Cannot fix the 'fix' command itself."
+			return 1
+		fi
 
 		local tmpfile=$(mktemp)
 		eval "$command" 2>&1 | tee "$tmpfile" > /dev/null
