@@ -106,9 +106,6 @@ fix() {
 		fi
 	fi
 
-	
-	echo $prompt
-
 	echo -e "\033[0;34m[fix] Asking Gemini for a fix...\033[0m"
 	local full_response=$(ask_gemini "$prompt")
 
