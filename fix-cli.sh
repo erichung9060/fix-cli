@@ -26,7 +26,7 @@ ask_gemini() {
 
 	curl -s \
 		-H "Content-Type: application/json" \
-		-X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$api_key" \
+		-X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=$api_key" \
 		-d "$json_payload" \
 		| jq -r '.candidates[0].content.parts[0].text'
 }
