@@ -39,47 +39,13 @@ fix --uninstall
 
 ## Example
 
-```bash
-$ ifconfig
--bash: /usr/sbin/ifconfig: No such file or directory
+1. `fix`
+<img width="716" alt="fix" src="https://github.com/user-attachments/assets/aad0059f-85e5-42ba-bfde-8e95fb8a6901" />
 
-$ fix
-[fix] Asking Gemini for a fix...
-[fix] Gemini suggests command: sudo apt-get update && sudo apt-get install net-tools
-Execute the command? (y/n) y
-[fix] Executing...
-Get:1 https://dl.google.com/linux/chrome/deb stable InRelease [1825 B]
-Hit:2 https://deb.nodesource.com/node_20.x nodistro InRelease                                       
-Get:3 https://dl.google.com/linux/chrome/deb stable/main amd64 Packages [1217 B]
-Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease  
-Fetched 3042 B in 1s (4967 B/s)
-Reading package lists... Done
-...
-[fix] Execute original command? (y/n) y
-[fix] Executing...
-docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
-        ether 02:42:39:57:5e:67  txqueuelen 0  (Ethernet)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 0  bytes 0 (0.0 B)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+2. `fix -e`
+<img width="716" alt="fix -e" src="https://github.com/user-attachments/assets/44eaff41-3322-4dc2-8716-f2bba4d9af6d" />
 
-ens18: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.2.2.226  netmask 255.255.252.0  broadcast 10.2.3.255
-        inet6 fe80::be24:11ff:fe77:a44d  prefixlen 64  scopeid 0x20<link>
-        ether bc:24:11:77:a4:4d  txqueuelen 1000  (Ethernet)
-        RX packets 9270896  bytes 4069265448 (4.0 GB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 8796796  bytes 3992005143 (3.9 GB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+3. `fix -i`
+<img width="716" alt="fix -i" src="https://github.com/user-attachments/assets/cbc664e8-71c0-4975-8b83-de93b6b0871b" />
 
-lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
-        inet 127.0.0.1  netmask 255.0.0.0
-        inet6 ::1  prefixlen 128  scopeid 0x10<host>
-        loop  txqueuelen 1000  (Local Loopback)
-        RX packets 5449409  bytes 926215140 (926.2 MB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 5449409  bytes 926215140 (926.2 MB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-```
+

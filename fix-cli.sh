@@ -34,7 +34,7 @@ ask_gemini() {
 fix() {
 	user_input_prompt=0
 	need_explain=0
-	# handle parameters
+	
 	case "$1" in
 		"-h"|"--help")
 			show_help
@@ -97,7 +97,7 @@ fix() {
 		user_prompt=$(<"$tmp_prompt")
 		rm -f "$tmp_prompt"
 		prompt+=$user_prompt
-		prompt+="\nAt the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
+		prompt+="\nDon't use Markdown. At the end of your response, add a new line with just the correct one-line command to fix this problem."
 	else
 		local tmpfile=$(mktemp)
 		eval "$command" 2>&1 | tee "$tmpfile" > /dev/null
@@ -105,7 +105,7 @@ fix() {
 
 		prompt+="I am using $OS. I executed this command: \"$command\". And its output was: \n$command_output.\n"
 		if [[ $need_explain == 1 ]]; then
-			prompt+="Please explain what went wrong and provide a correct command to fix this problem. Include a brief explanation of the issue. Don't use Markdown. At the end of your response, add a new line with just the correct one-line command to fix this problem. "
+			prompt+="Please analyze the error and provide a clear explanation of what went wrong. Then, suggest a solution with a brief explanation. Don't use Markdown. At the end of your response, add a new line with just the correct one-line command to fix this problem."
 		else
 			prompt+="Please give me a correct one-line command to fix this problem. Only return the command, no explanation or additional words needed."
 		fi
