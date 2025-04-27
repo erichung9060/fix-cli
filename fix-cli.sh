@@ -81,6 +81,14 @@ fix() {
 			;;
 	esac
 
+	local command=$(fc -ln -1)
+	command=$(echo "$command" | sed 's/^[[:space:]]*//')
+	if [[ "$command" == "fix"* ]]; then
+		echo -e "\033[0;31mError: Cannot fix the 'fix' command itself.\033[0m"
+		echo -e "\033[0;31mPlease run the command that produces an error first, then use 'fix' to get help.\033[0m"
+		return 1
+	fi
+
 	local prompt=""
 	if [[ $user_input_prompt == 1 ]]; then
 		echo "Please enter prompt for Gemini (press Ctrl+D when done):"
@@ -91,20 +99,13 @@ fix() {
 		prompt+=$user_prompt
 		prompt+="\nAt the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
 	else
-		local command=$(fc -ln -1)
-		command=$(echo "$command" | sed 's/^[[:space:]]*//')
-		if [[ "$command" == "fix"* ]]; then
-			echo "Error: Cannot fix the 'fix' command itself."
-			return 1
-		fi
-
 		local tmpfile=$(mktemp)
 		eval "$command" 2>&1 | tee "$tmpfile" > /dev/null
 		local command_output=$(<"$tmpfile")
 
 		prompt+="I am using $OS. I executed this command: \"$command\". And its output was: \n$command_output.\n"
 		if [[ $need_explain == 1 ]]; then
-			prompt+="Please explain what went wrong and provide a correct command to fix this problem. Include a brief explanation of the issue. At the end of your response, add a new line with just the command 'COMMAND:' followed by the correct one-line command to fix this problem. Don't use Markdown."
+			prompt+="Please explain what went wrong and provide a correct command to fix this problem. Include a brief explanation of the issue. Don't use Markdown. At the end of your response, add a new line with just the correct one-line command to fix this problem. "
 		else
 			prompt+="Please give me a correct one-line command to fix this problem. Only return the command, no explanation or additional words needed."
 		fi
@@ -120,9 +121,9 @@ fix() {
 
 	if [[ $need_explain == 1 ]]; then
 		explanation=$(echo "$full_response" | sed '$d')
-		fixed_command=$(echo "$full_response" | tail -n1 | sed 's/^COMMAND://')
+		fixed_command=$(echo "$full_response" | tail -n1)
 		echo -e "\033[0;32m[fix] Gemini's explanation: \033[0m"
-		echo "$explanation"
+		echo "$explanation\n"
 	else
 		fixed_command=$full_response
 	fi
@@ -135,9 +136,10 @@ fix() {
 		eval "$fixed_command"
 	else
 		echo "Execution cancelled."
+		return 0
 	fi
 
-	echo -e "\033[0;32m[fix] Original command: \033[0m$command"
+	echo -e "\n\033[0;32m[fix] Original command: \033[0m$command"
 	echo -n "Execute the command? (y or Enter/n) "
 	read confirm
 	if [[ "$confirm" == "y" || -z "$confirm" ]]; then
@@ -149,4 +151,3 @@ fix() {
 
 	rm -f "$tmpfile"
 }
-
