@@ -20,7 +20,7 @@ Let's see some example:
 
 ## Installation
 
-1. First, you need to get a [Gemini API Key](https://makersuite.google.com/app/apikey)
+1. Get a Gemini API Key from [Google AI Studio](https://makersuite.google.com/app/apikey)
 
 2. Run this command to download and install fix-cli tool:
 ```bash
