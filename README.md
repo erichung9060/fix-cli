@@ -4,6 +4,10 @@
 
 When you run a command that results in an error, just type fix and Gemini AI will analyze the issue, suggest the correct command, and ask if you’d like to run it. Simply press Enter to apply the fix automatically.
 
+Let's see some example:
+
+<img width="718" alt="image" src="https://github.com/user-attachments/assets/12422ed6-5be1-49a9-84e2-7bfc4cc0c3a9" />
+
 ## Features
 
 - 🤖 Uses Gemini 2.0 flash to analyze command errors and suggest fixes
