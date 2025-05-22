@@ -2,6 +2,8 @@
 
 🛠️ A command-line fixing tool powered by Gemini AI 2.0 — whenever you run a broken command, it helps you figure out the correct one !
 
+When you run a command that results in an error, just type fix and Gemini AI will analyze the issue, suggest the correct command, and ask if you’d like to run it. Simply press Enter to apply the fix automatically.
+
 ## Features
 
 - 🤖 Uses Gemini 2.0 flash to analyze command errors and suggest fixes
